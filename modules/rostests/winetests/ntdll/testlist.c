@@ -37,7 +37,9 @@ const struct test winetest_testlist[] =
 #ifdef _M_IX86
     { "generated", func_generated },
 #endif
+#ifndef _M_AMD64 // hangs
     { "info", func_info },
+#endif
     { "large_int", func_large_int },
     { "om", func_om },
     { "path", func_path },
