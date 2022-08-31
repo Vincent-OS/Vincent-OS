@@ -4681,7 +4681,7 @@ static void test_gethostbyname(void)
     struct hostent *he;
     struct in_addr **addr_list;
     char name[256], first_ip[16];
-    int ret, i, count;
+    int ret, i, count = 0;
     PMIB_IPFORWARDTABLE routes = NULL;
     PIP_ADAPTER_INFO adapters = NULL, k;
     DWORD adap_size = 0, route_size = 0;
@@ -7008,6 +7008,11 @@ static void test_write_watch(void)
     size = 0x10000;
     base = VirtualAlloc( 0, size, MEM_RESERVE | MEM_COMMIT | MEM_WRITE_WATCH, PAGE_READWRITE );
     ok( base != NULL, "VirtualAlloc failed %u\n", GetLastError() );
+    if (base == NULL)
+    {
+        skip("failed to allocate %u bytes. Skipping test.", size);
+        return;
+    }
 
     memset( base, 0, size );
     count = 64;
