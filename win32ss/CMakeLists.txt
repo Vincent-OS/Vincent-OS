@@ -226,7 +226,6 @@ list(APPEND SOURCE
 endif()
 
 if(KDBG)
-    add_definitions(-DKDBG)
     list(APPEND SOURCE gdi/ntgdi/gdikdbgext.c)
 endif()
 
