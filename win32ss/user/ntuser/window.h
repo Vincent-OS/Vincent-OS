@@ -124,4 +124,21 @@ BOOL FASTCALL IntBroadcastImeShowStatusChange(PWND pImeWnd, BOOL bShow);
 VOID FASTCALL IntNotifyImeShowStatus(PWND pImeWnd);
 VOID FASTCALL IntCheckImeShowStatusInThread(PWND pImeWnd);
 
+static inline
+VOID
+WndSetOwner(PWND pwnd, PWND pwndOwner)
+{
+    if (pwnd->spwndOwner != NULL)
+    {
+        UserDereferenceObject(pwnd->spwndOwner);
+    }
+
+    if (pwndOwner != NULL)
+    {
+        UserReferenceObject(pwndOwner);
+    }
+
+    pwnd->spwndOwner = pwndOwner;
+}
+
 /* EOF */
