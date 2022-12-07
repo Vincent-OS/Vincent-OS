@@ -402,6 +402,9 @@ typedef struct _MMPFN
             USHORT ShortFlags;
         } e2;
     } u3;
+#ifdef _WIN64
+    ULONG UsedPageTableEntries;
+#endif
     union
     {
         MMPTE OriginalPte;
@@ -415,7 +418,11 @@ typedef struct _MMPFN
         ULONG_PTR EntireFrame;
         struct
         {
+#ifdef _WIN64
+            ULONG_PTR PteFrame : 57;
+#else
             ULONG_PTR PteFrame:25;
+#endif
             ULONG_PTR InPageError:1;
             ULONG_PTR VerifierAllocation:1;
             ULONG_PTR AweAllocation:1;
