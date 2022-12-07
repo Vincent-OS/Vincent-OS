@@ -377,18 +377,38 @@ typedef struct _MMPFN
         PFN_NUMBER Flink;
         ULONG WsIndex;
         PKEVENT Event;
+#if (NTDDI_VERSION < NTDDI_VISTA)
         NTSTATUS ReadStatus;
+#else
+        PVOID Next;
+        PVOID volatile VolatileNext;
+        PKTHREAD KernelStackOwner;
+#endif
         SINGLE_LIST_ENTRY NextStackPfn;
 
         // HACK for ROSPFN
         SWAPENTRY SwapEntry;
     } u1;
+#if (NTDDI_VERSION < NTDDI_VISTA)
     PMMPTE PteAddress;
+#endif
     union
     {
         PFN_NUMBER Blink;
         ULONG_PTR ShareCount;
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+        MMPTE* ImageProtoPte;
+#endif
     } u2;
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+    union
+    {
+        PMMPTE PteAddress;
+        PVOID volatile VolatilePteAddress;
+        LONG volatile Lock;
+        ULONG_PTR PteLong;
+    };
+#endif
     union
     {
         struct
@@ -418,6 +438,22 @@ typedef struct _MMPFN
         ULONG_PTR EntireFrame;
         struct
         {
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+#ifdef _WIN64
+            ULONG_PTR PteFrame : 52;
+            ULONG_PTR Unused : 3;
+#else
+            ULONG_PTR PteFrame:25;
+#endif
+            ULONG_PTR PfnImageVerified : 1;
+            ULONG_PTR AweAllocation : 1;
+            ULONG_PTR PrototypePte : 1;
+#ifdef _WIN64
+            ULONG_PTR PageColor : 6;
+#else
+            ULONG_PTR PageColor : 4;
+#endif
+#else
 #ifdef _WIN64
             ULONG_PTR PteFrame : 57;
 #else
@@ -428,6 +464,7 @@ typedef struct _MMPFN
             ULONG_PTR AweAllocation:1;
             ULONG_PTR Priority:3;
             ULONG_PTR MustBeCached:1;
+#endif
         };
     } u4;
 #if MI_TRACE_PFNS
