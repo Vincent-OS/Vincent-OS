@@ -296,6 +296,7 @@ static void test_desktop_displaynameof(void)
 
 START_TEST(shfldr_special)
 {
+    __debugbreak();
     test_parse_for_entire_network();
     test_parse_for_control_panel();
     test_printers_folder();

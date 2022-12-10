@@ -3682,7 +3682,7 @@ START_TEST(tmarshal)
     HRESULT hr;
     HANDLE hOleaut32 = GetModuleHandleA("oleaut32.dll");
     pVarAdd = (void*)GetProcAddress(hOleaut32, "VarAdd");
-
+    __debugbreak();
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     hr = register_current_module_typelib();

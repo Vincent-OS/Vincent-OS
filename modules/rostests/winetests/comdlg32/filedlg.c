@@ -1332,6 +1332,7 @@ static void test_ole_initialization(void)
 
 START_TEST(filedlg)
 {
+    __debugbreak();
     test_DialogCancel();
     test_create_view_window2();
     test_create_view_template();

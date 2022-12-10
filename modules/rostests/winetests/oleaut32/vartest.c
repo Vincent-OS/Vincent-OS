@@ -9176,6 +9176,7 @@ static void test_VarImp(void)
 
 START_TEST(vartest)
 {
+    __debugbreak();
   init();
 
   test_VariantInit();

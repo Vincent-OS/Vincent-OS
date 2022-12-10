@@ -1515,6 +1515,7 @@ static void test_newmenu(void)
 
 START_TEST(shlview)
 {
+    __debugbreak();
     OleInitialize(NULL);
 
     init_msg_sequences(sequences, NUM_MSG_SEQUENCES);

@@ -760,7 +760,7 @@ static void test_recordWAVE(HWND hwnd)
 
     err = mciSendStringA("set x time format milliseconds", NULL, 0, NULL);
     ok(!err,"mci set time format milliseconds returned %s\n", dbg_mcierr(err));
-
+    __debugbreak();
     err = mciSendStringA("save x tempfile1.wav", NULL, 0, NULL);
     ok(!err,"mci save returned %s\n", dbg_mcierr(err));
 
@@ -1438,6 +1438,7 @@ START_TEST(mci)
     char curdir[MAX_PATH], tmpdir[MAX_PATH];
     MCIERROR err;
     HWND hwnd;
+    __debugbreak();
 
     GetCurrentDirectoryA(MAX_PATH, curdir);
     GetTempPathA(MAX_PATH, tmpdir);

@@ -3757,7 +3757,7 @@ START_TEST(regedit)
 {
     HKEY hkey;
     LONG err;
-
+    __debugbreak();
     /* Check if regedit.exe is running with elevated privileges */
     err = RegDeleteKeyA(HKEY_CLASSES_ROOT, KEY_BASE);
     if (err == ERROR_ACCESS_DENIED)
