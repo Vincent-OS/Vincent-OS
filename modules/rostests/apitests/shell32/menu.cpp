@@ -404,7 +404,6 @@ void test_CShellMenu_with_DeskBar(IShellFolder *shellFolder, HMENU hmenu)
 
 START_TEST(menu)
 {
-    __debugbreak();
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     IShellFolder *shellFolder;

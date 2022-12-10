@@ -1346,7 +1346,6 @@ static void test_demangle(void)
 
 START_TEST(cpp)
 {
-    __debugbreak();
   if (!InitFunctionPtrs())
     return;
 

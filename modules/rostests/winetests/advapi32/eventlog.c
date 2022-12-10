@@ -913,8 +913,8 @@ static void test_readwrite(void)
     /* Read all events from our created eventlog, one by one */
     handle = OpenEventLogA(NULL, eventlogname);
     ok(handle != NULL, "Failed to open Event Log, got %d\n", GetLastError());
-
-    for (i = 0; i < sizeof(read_write) / sizeof(read_write[0]); i++)
+    i = 0;
+    for (;;)
     {
         void *buf;
         DWORD read, needed;
@@ -1007,6 +1007,7 @@ static void test_readwrite(void)
            "Expected the closing DWORD to contain the length of the record\n");
 
         HeapFree(GetProcessHeap(), 0, buf);
+        i++;
     }
     CloseEventLog(handle);
 
@@ -1239,7 +1240,6 @@ done:
 
 START_TEST(eventlog)
 {
-    __debugbreak();
     SetLastError(0xdeadbeef);
     CloseEventLog(NULL);
     if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)

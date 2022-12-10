@@ -202,7 +202,7 @@ InitializeTestImage(
     ok(wcsncmp((PWCHAR)str1, (PWCHAR)str2, count) == 0, \
        "string is wrong, expected: '%S', got '%S'\n", str1, str2); \
 
-#define ok_enumres_(_Res, _Type, _Name, _Lang, _Data, _Size) \
+#define ok_enumres(_Res, _Type, _Name, _Lang, _Data, _Size) \
     ok_dec((_Res)->Type, _Type); \
     if ((ULONG_PTR)(_Name) > 0xFFFF) \
     { \
@@ -217,24 +217,6 @@ InitializeTestImage(
     ok_ptr((PVOID)(_Res)->Data, _Data); \
     ok_dec((_Res)->Size, _Size); \
     ok_dec((_Res)->Reserved, 0);
-
-void ok_enumres(PLDR_ENUM_RESOURCE_INFO _Res, ULONG _Type, ULONG_PTR _Name, ULONG _Lang, PVOID _Data, SIZE_T _Size)
-{
-    if ((ULONG_PTR)(_Name) > 0xFFFF)
-    {
-        ok_dec(*(WORD*)((_Res)->Name), wcslen((PWCHAR)(_Name)));
-        ok_nwstr((PWCHAR)((_Res)->Name + 2), (PWCHAR)_Name, *(WORD*)((_Res)->Name));
-    }
-    else
-    {
-        ok_dec((_Res)->Name, (ULONG_PTR)_Name);
-    }
-    ok_hex((_Res)->Language, _Lang);
-    ok_ptr((PVOID)(_Res)->Data, _Data);
-    ok_dec((_Res)->Size, _Size);
-    ok_dec((_Res)->Reserved, 0);
-}
-
 
 static
 void
@@ -260,14 +242,14 @@ Test_Data(PTEST_IMAGE TestImage)
     ok_ptr((PVOID)EnumRes[0].Data, TestImage->Resources.StringBuffer);
     ok_dec(EnumRes[0].Size, 2);
 
-    ok_enumres(&EnumRes[0], 1, (ULONG_PTR)L"TEST", 0x409, TestImage->Resources.StringBuffer, 2);
-    ok_enumres(&EnumRes[1], 1, (ULONG_PTR)L"TEST", 0x407, TestImage->Resources.StringBuffer + 2, 4);
-    ok_enumres(&EnumRes[2], 1, 7, 0x408, TestImage->Resources.StringBuffer + 4, 6);
-    ok_enumres(&EnumRes[3], 1, 7, 0x406, TestImage->Resources.StringBuffer + 6, 8);
-    ok_enumres(&EnumRes[4], 2, (ULONG_PTR)L"LOL", 0x405, TestImage->Resources.StringBuffer + 8, 10);
-    ok_enumres(&EnumRes[5], 2, (ULONG_PTR)L"LOL", 0x403, TestImage->Resources.StringBuffer + 10, 12);
-    ok_enumres(&EnumRes[6], 2, (ULONG_PTR)L"xD", 0x402, TestImage->Resources.StringBuffer + 12, 14);
-    ok_enumres(&EnumRes[7], 2, (ULONG_PTR)L"xD", 0x404, TestImage->Resources.StringBuffer + 14, 16);
+    ok_enumres(&EnumRes[0], 1, L"TEST", 0x409, TestImage->Resources.StringBuffer, 2)
+    ok_enumres(&EnumRes[1], 1, L"TEST", 0x407, TestImage->Resources.StringBuffer + 2, 4)
+    ok_enumres(&EnumRes[2], 1, 7, 0x408, TestImage->Resources.StringBuffer + 4, 6)
+    ok_enumres(&EnumRes[3], 1, 7, 0x406, TestImage->Resources.StringBuffer + 6, 8)
+    ok_enumres(&EnumRes[4], 2, L"LOL", 0x405, TestImage->Resources.StringBuffer + 8, 10)
+    ok_enumres(&EnumRes[5], 2, L"LOL", 0x403, TestImage->Resources.StringBuffer + 10, 12)
+    ok_enumres(&EnumRes[6], 2, L"xD", 0x402, TestImage->Resources.StringBuffer + 12, 14)
+    ok_enumres(&EnumRes[7], 2, L"xD", 0x404, TestImage->Resources.StringBuffer + 14, 16)
 
     Status = LdrEnumResources(TestImage, &ResourceInfo, 1, &ResourceCount, EnumRes);
     ok_hex(Status, STATUS_SUCCESS);

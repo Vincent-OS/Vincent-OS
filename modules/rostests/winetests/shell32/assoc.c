@@ -299,7 +299,7 @@ START_TEST(assoc)
     IQueryAssociations *qa;
     IApplicationAssociationRegistration *appreg = NULL;
     HRESULT hr;
-    __debugbreak();
+
     CoInitialize(NULL);
 
     /* this works since XP */
