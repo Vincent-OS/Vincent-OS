@@ -306,6 +306,33 @@ IntWinListChildren(PWND Window)
     return List;
 }
 
+BOOL
+FASTCALL
+IntCheckForOwnedPopups(
+    _In_ PWND pwnd)
+{
+    PWND pwndDesktop, pwndChild;
+    BOOL bFound = FALSE;
+
+    /* Get the desktop Window */
+    pwndDesktop = co_GetDesktopWindow(pwnd);
+    ASSERT(pwndDesktop != NULL);
+
+    /* Iterate over all desktop children */
+    for (pwndChild = pwndDesktop->spwndChild;
+         pwndChild != NULL;
+         pwndChild = pwndChild->spwndNext)
+    {
+        if (pwndChild->spwndOwner == pwnd)
+        {
+            bFound = TRUE;
+            break;
+        }
+    }
+
+    return bFound;
+}
+
 HWND* FASTCALL
 IntWinListOwnedPopups(PWND Window)
 {
@@ -317,6 +344,7 @@ IntWinListOwnedPopups(PWND Window)
     if (!Desktop)
         return NULL;
 
+    // This is broken: popup windows do no need to be children of the desktop window
     for (Child = Desktop->spwndChild; Child; Child = Child->spwndNext)
     {
         if (Child->spwndOwner == Window)
@@ -578,6 +606,12 @@ LRESULT co_UserFreeWindow(PWND Window,
    BOOLEAN BelongsToThreadData;
 
    ASSERT(Window);
+
+   if (IntCheckForOwnedPopups(Window))
+   {
+       ERR("Trying to delete owning window.\n");
+       //return 0;
+   }
 
    if(Window->state2 & WNDS2_INDESTROY)
    {
