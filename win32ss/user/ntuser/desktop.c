@@ -1788,6 +1788,9 @@ BOOL IntDeRegisterShellHookWindow(HWND hWnd)
     PLIST_ENTRY ListEntry;
     PSHELL_HOOK_WINDOW Current;
 
+    if (Desktop == NULL)
+        return TRUE;
+
     ListEntry = Desktop->ShellHookWindows.Flink;
     while (ListEntry != &Desktop->ShellHookWindows)
     {
