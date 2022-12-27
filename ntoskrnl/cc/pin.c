@@ -286,7 +286,6 @@ CcpPinData(
         }
     }
 
-    Result = FALSE;
     _SEH2_TRY
     {
         /* Ensure the pages are resident */
@@ -295,17 +294,19 @@ CcpPinData(
                 BooleanFlagOn(Flags, PIN_NO_READ),
                 VacbOffset, Length);
     }
-    _SEH2_FINALLY
+    _SEH2_EXCEPT(EXCEPTION_EXECUTE_HANDLER)
     {
-        if (!Result)
-        {
-            CCTRACE(CC_API_DEBUG, "FileObject=%p FileOffset=%p Length=%lu Flags=0x%lx -> FALSE\n",
-                            SharedCacheMap->FileObject, FileOffset, Length, Flags);
-            CcUnpinData(&NewBcb->PFCB);
-            return FALSE;
-        }
+        Result = FALSE;
     }
     _SEH2_END;
+
+    if (!Result)
+    {
+        CCTRACE(CC_API_DEBUG, "FileObject=%p FileOffset=%p Length=%lu Flags=0x%lx -> FALSE\n",
+                SharedCacheMap->FileObject, FileOffset, Length, Flags);
+        CcUnpinData(&NewBcb->PFCB);
+        return FALSE;
+    }
 
     *Bcb = &NewBcb->PFCB;
     *Buffer = (PVOID)((ULONG_PTR)NewBcb->Vacb->BaseAddress + VacbOffset);
@@ -396,20 +397,21 @@ CcMapData (
 
     _SEH2_TRY
     {
-        Result = FALSE;
         /* Ensure the pages are resident */
         Result = CcRosEnsureVacbResident(iBcb->Vacb, BooleanFlagOn(Flags, MAP_WAIT),
                 BooleanFlagOn(Flags, MAP_NO_READ), VacbOffset, Length);
     }
-    _SEH2_FINALLY
+    _SEH2_EXCEPT(EXCEPTION_EXECUTE_HANDLER)
     {
-        if (!Result)
-        {
-            CcpDereferenceBcb(SharedCacheMap, iBcb);
-            return FALSE;
-        }
+        Result = FALSE;
     }
     _SEH2_END;
+
+    if (!Result)
+    {
+        CcpDereferenceBcb(SharedCacheMap, iBcb);
+        return FALSE;
+    }
 
     *pBcb = &iBcb->PFCB;
     *pBuffer = (PVOID)((ULONG_PTR)iBcb->Vacb->BaseAddress + VacbOffset);
