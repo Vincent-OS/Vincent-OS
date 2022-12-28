@@ -286,20 +286,12 @@ CcpPinData(
         }
     }
 
-    _SEH2_TRY
-    {
-        /* Ensure the pages are resident */
-        Result = CcRosEnsureVacbResident(NewBcb->Vacb,
-                BooleanFlagOn(Flags, PIN_WAIT),
-                BooleanFlagOn(Flags, PIN_NO_READ),
-                VacbOffset, Length);
-    }
-    _SEH2_EXCEPT(EXCEPTION_EXECUTE_HANDLER)
-    {
-        Result = FALSE;
-    }
-    _SEH2_END;
-
+    /* Ensure the pages are resident */
+    Result = CcRosEnsureVacbResident(NewBcb->Vacb,
+                                     BooleanFlagOn(Flags, PIN_WAIT),
+                                     BooleanFlagOn(Flags, PIN_NO_READ),
+                                     VacbOffset,
+                                     Length);
     if (!Result)
     {
         CCTRACE(CC_API_DEBUG, "FileObject=%p FileOffset=%p Length=%lu Flags=0x%lx -> FALSE\n",
@@ -395,18 +387,12 @@ CcMapData (
         KeReleaseSpinLock(&SharedCacheMap->BcbSpinLock, OldIrql);
     }
 
-    _SEH2_TRY
-    {
-        /* Ensure the pages are resident */
-        Result = CcRosEnsureVacbResident(iBcb->Vacb, BooleanFlagOn(Flags, MAP_WAIT),
-                BooleanFlagOn(Flags, MAP_NO_READ), VacbOffset, Length);
-    }
-    _SEH2_EXCEPT(EXCEPTION_EXECUTE_HANDLER)
-    {
-        Result = FALSE;
-    }
-    _SEH2_END;
-
+    /* Ensure the pages are resident */
+    Result = CcRosEnsureVacbResident(iBcb->Vacb,
+                                     BooleanFlagOn(Flags, MAP_WAIT),
+                                     BooleanFlagOn(Flags, MAP_NO_READ),
+                                     VacbOffset,
+                                     Length);
     if (!Result)
     {
         CcpDereferenceBcb(SharedCacheMap, iBcb);
