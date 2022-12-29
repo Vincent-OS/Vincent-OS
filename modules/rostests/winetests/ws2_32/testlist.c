@@ -9,8 +9,6 @@ extern void func_sock(void);
 const struct test winetest_testlist[] =
 {
     { "protocol", func_protocol },
-#ifndef _M_AMD64 // hangs
     { "sock", func_sock },
-#endif
     { 0, 0 }
 };
