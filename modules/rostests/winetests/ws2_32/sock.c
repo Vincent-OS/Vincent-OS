@@ -7008,11 +7008,13 @@ static void test_write_watch(void)
     size = 0x10000;
     base = VirtualAlloc( 0, size, MEM_RESERVE | MEM_COMMIT | MEM_WRITE_WATCH, PAGE_READWRITE );
     ok( base != NULL, "VirtualAlloc failed %u\n", GetLastError() );
+#ifdef __REACTOS__ // CORE-7453: MEM_WRITE_WATCH is not supported
     if (base == NULL)
     {
-        skip("failed to allocate %u bytes. Skipping test.", size);
+        skip("Failed to allocate %u bytes. Skipping test.", size);
         return;
     }
+#endif
 
     memset( base, 0, size );
     count = 64;
@@ -8426,7 +8428,11 @@ todo_wine
     iret = connect(connector, (struct sockaddr*)&bindAddress, sizeof(bindAddress));
     ok(iret == 0, "connecting to accepting socket failed, error %d\n", WSAGetLastError());
 
+#ifdef __REACTOS__
+    dwret = WaitForSingleObject(overlapped.hEvent, 3000);
+#else
     dwret = WaitForSingleObject(overlapped.hEvent, INFINITE);
+#endif
     ok(dwret == WAIT_OBJECT_0, "Waiting for accept event failed with %d + errno %d\n", dwret, GetLastError());
 
     bret = GetOverlappedResult((HANDLE)listener, &overlapped, &bytesReturned, FALSE);
@@ -11624,8 +11630,11 @@ START_TEST( sock )
     test_GetAddrInfoW();
     test_GetAddrInfoExW();
     test_getaddrinfo();
+//#ifndef __REACTOS__ // These hang
+    //__debugbreak();
     test_AcceptEx();
     test_ConnectEx();
+//#endif
     test_DisconnectEx();
 
     test_sioRoutingInterfaceQuery();
