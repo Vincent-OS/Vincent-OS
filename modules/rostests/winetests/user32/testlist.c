@@ -61,9 +61,7 @@ const struct test winetest_testlist[] =
     { "monitor", func_monitor },
     { "msg_queue", func_msg_queue},
     { "msg_messages", func_msg_messages},
-#ifndef _M_AMD64 // crashes csrss
     { "msg_focus", func_msg_focus},
-#endif
     { "msg_winpos", func_msg_winpos},
     { "msg_paint", func_msg_paint},
     { "msg_input", func_msg_input},
