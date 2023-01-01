@@ -40,16 +40,16 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-if [ "$REACTOS_SOURCE_DIR" = "$PWD" ]; then
-	echo Creating directories in $REACTOS_OUTPUT_PATH
-	mkdir -p "$REACTOS_OUTPUT_PATH"
-	cd "$REACTOS_OUTPUT_PATH"
+if [ "$VINCENTOS_SOURCE_DIR" = "$PWD" ]; then
+	echo Creating directories in $VINCENTOS_OUTPUT_PATH
+	mkdir -p "$VINCENTOS_OUTPUT_PATH"
+	cd "$VINCENTOS_OUTPUT_PATH"
 fi
 
 echo Preparing reactos...
 rm -f CMakeCache.txt host-tools/CMakeCache.txt
 
-cmake -G "$CMAKE_GENERATOR" -DENABLE_CCACHE:BOOL=0 -DCMAKE_TOOLCHAIN_FILE:FILEPATH=toolchain-gcc.cmake -DARCH:STRING=$ARCH $EXTRA_ARGS $ROS_CMAKEOPTS "$REACTOS_SOURCE_DIR"
+cmake -G "$CMAKE_GENERATOR" -DENABLE_CCACHE:BOOL=0 -DCMAKE_TOOLCHAIN_FILE:FILEPATH=toolchain-gcc.cmake -DARCH:STRING=$ARCH $EXTRA_ARGS $ROS_CMAKEOPTS "$VINCENTOS_SOURCE_DIR"
 if [ $? -ne 0 ]; then
     echo "An error occured while configuring ReactOS"
     exit 1
