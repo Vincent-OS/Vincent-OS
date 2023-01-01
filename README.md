@@ -1,7 +1,7 @@
 <p align=center>
   <img alt="Vincent OS" src="https://github.com/Vincent-OS/website/blob/master/img/logo.png" style="width: 50%;">
   <a href="https://www.vincent-os.cf/">
-    <img alt="Vincent OS" src="https://github.com/Vincent-OS/website/blob/master/img/logo.png" style="width: 50%;">
+    <img alt="Vincent OS" src="https://github.com/Vincent-OS/website/blob/master/img/logo%20text.png" style="width: 50%;">
   </a>
 </p>
 
